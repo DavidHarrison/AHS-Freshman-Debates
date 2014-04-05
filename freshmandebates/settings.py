@@ -1,4 +1,4 @@
-# Django settings for freshmendebates project.
+# Django settings for freshmandebates project.
 import os
 import socket
 #import envvars
@@ -78,7 +78,7 @@ STATIC_URL = '/static/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
-    PROJECT_ROOT + "/freshmendebates/static/",
+    PROJECT_ROOT + "/freshmandebates/static/",
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
@@ -113,13 +113,13 @@ MIDDLEWARE_CLASSES = (
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-ROOT_URLCONF = 'freshmendebates.urls'
+ROOT_URLCONF = 'freshmandebates.urls'
 
 # Python dotted path to the WSGI application used by Django's runserver.
-WSGI_APPLICATION = 'freshmendebates.wsgi.application'
+WSGI_APPLICATION = 'freshmandebates.wsgi.application'
 
 TEMPLATE_DIRS = (
-    PROJECT_ROOT + "/freshmendebates/templates/debates/"
+    PROJECT_ROOT + "/freshmandebates/templates/debates/"
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
