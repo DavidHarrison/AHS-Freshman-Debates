@@ -168,7 +168,6 @@ class Form(Model):
     #R = CharField(max_length=2, choices=SCORE_CHOICES, default=5)
     TeamNumber       = ForeignKey(Team)
     Notes            = TextField(max_length = 150)
-    #Affirmative      = BooleanField()
 
 class SubmittedOverallScore(Model):
     Speaker1         = CharField(max_length=2, choices=SCORE_CHOICES,

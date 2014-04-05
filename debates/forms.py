@@ -34,28 +34,6 @@ class OverallScore(ModelForm):
     class Meta:
         model = Form
 
-'''
-class AffirmativeScore(ModelForm):
-    SlideShowScore   = scores.choices
-    Speaker1         = scores.choices
-    Speaker2         = scores.choices
-    CrossExamination = scores.choices
-    Argument         = scores.choices
-    Rebuttal         = scores.choices
-    class Meta:
-        model = Affirmative_form
-
-class NegativeScore(ModelForm):
-    SlideShowScore   = scores.choices
-    Speaker1         = scores.choices
-    Speaker2         = scores.choices
-    CrossExamination = scores.choices
-    Argument         = scores.choices
-    Rebuttal         = scores.choices
-    class Meta:
-        model = Negative_form
-'''
-
 class RegistrationForm(ModelForm):
     FirstName = models.CharField(max_length=255)
     LastName  = models.CharField(max_length=255)

@@ -27,54 +27,49 @@ import logging
 
 logger = logging.getLogger('logview.debugger')
 
+def root(request):
+    return render(request,'debates/index.html')
+
 # get the debate that are on
 def judge(request):
-    Submit_form = 'null'
-    #TODO, are these needed?
-    #Affform = OverallScore()
-    #Negform = OverallScore()
+    #Submit_form = 'null'
+    Affform = OverallScore()
+    Negform = OverallScore()
     if request.method == 'GET':
-        Affform = OverallScore()
-        Negform = OverallScore()
-        logger.debug('Getting request method GET!')
+        logger.debug('Getting request method GET')
     elif request.method == 'POST':
-        logger.debug('Getting request method POST!')
+        logger.debug('Getting request method POST')
         logger.debug(request.POST)
-        # TODO, condense Affirmative and Negative into one function
-        if 'form_Affirmative' in request.POST:
-            logger.debug('Form is Positive')
-            Affform = OverallScore(request.POST)
-            Submit_form = 'aff'
-            if Affform.is_valid():
-                #creating an instance of submitted scores to save to database
-                p = fillScore(Affform, SubmittedAffirmativeScore())
+        form = OverallScore(request.POST)
+        if form.is_valid():
+            #creating an instance of submitted scores to save to database
+            p = fillScore(form, SubmittedOverallScore())
+            logger.debug('Form has been saved')
+            if 'form_Affirmative' in request.POST:
                 p.isAff = True
-                p.save()
-                logger.debug('Affirmative form has been saved')
-        elif 'form_Negative' in request.POST:
-            logger.debug('Form is Negative')
-            Negform = OverallScore(request.POST)
-            Submit_form = 'neg'
-            if Negform.is_valid():
-                #creating an instance of submitted scores to save to database
-                p = fillScore(Negform, SubmittedAffirmativeScore())
+                Affform = form
+                #Submit_form = 'aff'
+                logger.debug('Form is Positive')
+            elif 'form_Negative' in request.POST:
                 p.isAff = False
-                p.save()
-                logger.debug('Negative form has been saved')
+                Negform = form
+                #Submit_form = 'neg'
+                logger.debug('Form is Negative')
+            p.save()
         if request.is_ajax():
             logger.debug('Request is ajax')
-            msg = "The operation has been received correctly."
+            msg = "Operation received correctly"
             logger.debug(msg)
     #msg = "The operation has been received correctly."
     #print request.POST
     #return render_to_response('debates/scoring_upload.html', {'msg':msg},
     #                          context_instance=RequestContext(request))
     #return render_to_response(msg)
-    return render(request,'debates/judge.html',
-                  {
-                      'Affirmative_Form': Affform,
-                      'Negative_Form':    Negform,
-                  })
+    forms = {
+                'Affirmative_Form': Affform,
+                'Negative_Form':    Negform
+            }
+    return render(request,'debates/judge.html', forms)
 
 # fill out a given score from a given form
 def fillScore(form, score):
@@ -124,9 +119,9 @@ def splash(request):
     return render(request,'debates/Splash.html', {})
 
 def teacher(request):
-    #Index = SubmittedAffirmativeScore.objects.filter(TeamNumber =
+    #Index = SubmittedOverallScore.objects.filter(TeamNumber =
     #            'Test, still need to get team numbers')
-    Team = get_object_or_404(SubmittedAffirmativeScore)
+    Team = get_object_or_404(SubmittedOverallScore)
     return render(request,'debates/Teacher.html', {'Team': Team})
 
 def teacherselector(request):
