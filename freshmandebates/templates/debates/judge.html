@@ -24,16 +24,16 @@
 
 	jQuery(function() {
 
-		var form_Positive = jQuery("#form_Positive")
-		console.log (form_Positive)
-		form_Positive.submit(function(e){
-			jQuery("#sendbutton_Positive").attr('disabled', true)
-			jQuery("#sendwrapper_Positive").prepend('<span>Sending message, please wait... </span>')
-			jQuery("#ajaxwrapper_Positive").load(
-				form_Positive.attr('action') + ' #ajaxwrapper_Positive',
-				form_Positive.serializeArray(),
+		var form_Affirmative = jQuery("#form_Affirmative")
+		console.log (form_Affirmative)
+		form_Affirmative.submit(function(e){
+			jQuery("#sendbutton_Affirmative").attr('disabled', true)
+			jQuery("#sendwrapper_Affirmative").prepend('<span>Sending message, please wait... </span>')
+			jQuery("#ajaxwrapper_Affirmative").load(
+				form_Affirmative.attr('action') + ' #ajaxwrapper_Affirmative',
+				form_Affirmative.serializeArray(),
 				function(responseText, responseStatus) {
-					jQuery("#sendbutton_Positive").attr('disabled', false)
+					jQuery("#sendbutton_Affirmative").attr('disabled', false)
 				}
 
 			);
@@ -64,16 +64,16 @@
 				<h1>Affirmative</h1>
 				<br>
 
-				    <form method='post' id="form_Positive">
-				    <div id="ajaxwrapper_Positive">
+				    <form method='post' id="form_Affirmative">
+				    <div id="ajaxwrapper_Affirmative">
 				    	{% csrf_token %}
 						<br>
 						<br>
 						<ul>
 						{{ Affirmative_Form.as_p }}
-						<input type="hidden" name="form_Positive" value="form_Positive">
+						<input type="hidden" name="form_Affirmative" value="form_Affirmative">
 						</ul>
-						<p id="sendwrapper_Positive"><input type='submit' value='Submit Positive' /></p>
+						<p id="sendwrapper_Affirmative"><input type='submit' value='Submit Affirmative' /></p>
 					</div>
 				</form>
 			</div>

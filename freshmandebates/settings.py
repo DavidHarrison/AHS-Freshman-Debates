@@ -13,20 +13,26 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-#if socket.gethostname() == 'LAMP': # check for production
+# check for production
+#if socket.gethostname() == 'LAMP':
 #    DATABASES = envvars.DATABASES
 if False:
     print "What?"
 else:
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-            'NAME': 'dev.db',                      # Or path to database file if using sqlite3.
+            # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+            'ENGINE': 'django.db.backends.sqlite3',
+            # Or path to database file if using sqlite3.
+            'NAME': 'dev.db',
             # The following settings are not used with sqlite3:
             'USER': '',
             'PASSWORD': '',
-            'HOST': '',                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
-            'PORT': '',                      # Set to empty string for default.
+            # Empty for localhost through domain sockets or '127.0.0.1' for
+            # localhost through TCP.
+            'HOST': '',
+            # Set to empty string for default.
+            'PORT': '',
         }
     }
 
@@ -119,7 +125,7 @@ ROOT_URLCONF = 'freshmandebates.urls'
 WSGI_APPLICATION = 'freshmandebates.wsgi.application'
 
 TEMPLATE_DIRS = (
-    PROJECT_ROOT + "/freshmandebates/templates/debates/"
+    PROJECT_ROOT + "/freshmandebates/templates/"
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
