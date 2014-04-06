@@ -1,15 +1,16 @@
-from   django.shortcuts               import ( render, get_object_or_404 )
+from   django.shortcuts               import render
 from   debates.models                 import (
                                                  Topic, Location, Date, User,
-                                                 Form, SubmittedOverallScore,
-                                                 GoogleUser, Student
+                                                 Score, GoogleUser, Student,
+                                                 Team
                                              )
 from   debates.forms                  import (
-                                                 OverallScore,
+                                                 ScoreForm,
                                                  RegistrationForm,
                                                  ImportExcelForm
                                              )
-from   django.shortcuts               import ( render_to_response )
+from   freshmandebates.assign_scores  import averageScores
+from   django.shortcuts               import render_to_response
 from   django.http                    import (
                                                  HttpResponseRedirect,
                                                  HttpResponse,
@@ -19,70 +20,39 @@ from   django.contrib.auth.decorators import (
                                                  login_required,
                                                  user_passes_test
                                              )
-from   django.contrib.auth.models     import ( User )
-from   django.forms.extras.widgets    import ( SelectDateWidget )
+from   django.contrib.auth.models     import User
+from   django.forms.extras.widgets    import SelectDateWidget
 import datetime
-from   django.utils.timezone          import ( utc )
+from   django.utils.timezone          import utc
 import logging
 
 logger = logging.getLogger('logview.debugger')
 
-def root(request):
-    return render(request,'debates/index.html')
-
 # get the debate that are on
 def judge(request):
-    #Submit_form = 'null'
-    Affform = OverallScore()
-    Negform = OverallScore()
+    aff_form = ScoreForm()
+    neg_form = ScoreForm()
     if request.method == 'GET':
-        logger.debug('Getting request method GET')
+        pass
     elif request.method == 'POST':
-        logger.debug('Getting request method POST')
-        logger.debug(request.POST)
-        form = OverallScore(request.POST)
+        form = ScoreForm(request.POST)
         if form.is_valid():
-            #creating an instance of submitted scores to save to database
-            p = fillScore(form, SubmittedOverallScore())
-            logger.debug('Form has been saved')
-            if 'form_Affirmative' in request.POST:
-                p.isAff = True
-                Affform = form
-                #Submit_form = 'aff'
-                logger.debug('Form is Positive')
-            elif 'form_Negative' in request.POST:
-                p.isAff = False
-                Negform = form
-                #Submit_form = 'neg'
-                logger.debug('Form is Negative')
-            p.save()
-        if request.is_ajax():
-            logger.debug('Request is ajax')
-            msg = "Operation received correctly"
-            logger.debug(msg)
-    #msg = "The operation has been received correctly."
-    #print request.POST
-    #return render_to_response('debates/scoring_upload.html', {'msg':msg},
-    #                          context_instance=RequestContext(request))
-    #return render_to_response(msg)
+            s = form.save()
+            #if the form is affirmative, set the object to be affirmative
+            if 'form_affirmative' in request.POST:
+                s.is_aff = True
+                aff_form = form
+            #else, assume its negative (not affirmative)
+            else:
+                s.is_aff = False
+                neg_form = form
+            #save the form to the database
+            s.save()
     forms = {
-                'Affirmative_Form': Affform,
-                'Negative_Form':    Negform
+                'affirmative_form': aff_form,
+                'negative_form':    neg_form
             }
     return render(request,'debates/judge.html', forms)
-
-# fill out a given score from a given form
-def fillScore(form, score):
-    score.Speaker1         = form.cleaned_data.get('Speaker 1')
-    score.Speaker2         = form.cleaned_data.get('Speaker 2')
-    score.CrossExamination = form.cleaned_data.get('Cross Examination')
-    score.SlideShowScore   = form.cleaned_data.get('Slide Show')
-    score.Argument         = form.cleaned_data.get('Argument')
-    score.Rebuttal         = form.cleaned_data.get('Rebuttal')
-    #score.?               = form.cleaned_data.get('Team')
-    score.TeamNumber       = ''
-    return score
-
 
 def new_user(request):
     if request.method == 'POST':
@@ -107,34 +77,34 @@ def new_user(request):
     return render(request, 'debates/new_user.html', {'Form': form,})
 
 def handle(request):
-    Affirmative_Scores = Affirmative.objects.all()
-    Negative_Scores    = Negative.objects.all()
+    aff_scores = Affirmative.objects.all()
+    aff_scores = Negative.objects.all()
     return render(request,'debates/scoring_upload.html',
                   {
-                      'Affirmative_Scores': Affirmative_Scores,
-                      'Negative_Scores':    Negative_Scores,
+                      'affirmative_scores': aff_scores,
+                      'negative_scores':    neg_scores,
                   })
 
 def splash(request):
-    return render(request,'debates/Splash.html', {})
+    return render(request,'debates/splash.html')
 
 def teacher(request):
-    #Index = SubmittedOverallScore.objects.filter(TeamNumber =
-    #            'Test, still need to get team numbers')
-    Team = get_object_or_404(SubmittedOverallScore)
-    return render(request,'debates/Teacher.html', {'Team': Team})
+    #testing it out
+    tn = 5
+    judge_scores = Score.objects.filter(team_number = tn)
+    avg_score = averageScores(judge_scores)
+    return render(request,'debates/teacher.html', {'score': avg_score})
 
 def teacherselector(request):
-    return render(request,'debates/TeacherSelector.html', {}) 
+    return render(request,'debates/teacher_selector.html')
 
 def teamcreate(request):
     Submit_form = 'null'
-    #TODO, define/find function
-    #new_team = Team()
-    return render(request,'debates/TeamCreate.html', {})    
+    new_team = Team()
+    return render(request,'debates/team_create.html')
 
 def debateselector(request):
-    return render(request,'debates/DebateSelector.html', {})
+    return render(request,'debates/debate_selector.html')
 
 def test_flowcell(request):
     # If the form has been submitted...
@@ -154,7 +124,7 @@ def test_flowcell(request):
     else:
         # An unbound form
         form = ImportExcelForm()
-    return render(request,'debates/file_upload.html',{'form': form,})
+    return render(request,'debates/file_upload.html',{'form': form})
 
 #def CSVUpload(request):
 #    if request.method == 'POST':
@@ -162,8 +132,7 @@ def test_flowcell(request):
 #        if form.is_valid():
 #            uploaded_file = request.FILES['html-file-attribute-name']
 #            # Write the file to disk
-#            fout = open("path/to/save/file/to/%s" % uploaded_file.name,
-#                        'wb')
+#            fout = open("path/to/save/file/to/%s" % uploaded_file.name, 'wb')
 #            for chunk in uploaded_file.chunks():
 #                fout.write(chunk)
 #            fout.close()

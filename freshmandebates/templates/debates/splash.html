@@ -1,4 +1,3 @@
-
 <html>
 <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}DebateSite.css">
 <script type="text/javascript">
@@ -15,17 +14,17 @@
 
 		<div id="SelectT" class="Button">
 			<h1>Teachers</h1>
-			<h2>Manage debate teams, check grades and upcoming debates.</h2>
+			<h2>manage debate teams, check grades and upcoming debates</h2>
 			<br>
 		</div>
 		<div id="SelectA" class="Button">
-			<h1>Admin</h1>
-			<h2>Ms. O, log in here to manage debates and organize everything.</h2>
+			<h1>Administrator</h1>
+			<h2>manage the server</h2>
 			<br>
 		</div>
 		<div id="SelectJ" class="Button">
 			<h1>Judges</h1>
-			<h2>Judge debates, view and manage debates you will judge.</h2>
+			<h2>judge debates, view and manage debates you will judge</h2>
 			<br>
 		</div>
 		<br>
@@ -47,14 +46,14 @@
 
 		something.style.cursor = 'pointer';
 		something.onclick = function() {
-			window.open ('TeacherSelector','_self',false)
+			window.open ('teacher_selector','_self',false)
 		};
 
 		var something = document.getElementById('SelectJ');
 
 		something.style.cursor = 'pointer';
 		something.onclick = function() {
-			window.open ('DebateSelector','_self',false)
+			window.open ('debate_selector','_self',false)
 		};
 
 		var something = document.getElementById('LogIn');

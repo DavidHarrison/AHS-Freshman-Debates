@@ -1,0 +1,37 @@
+<!doctype html>
+<html>
+<head>
+<title>AHS Debates</title>
+</head>
+<div align="left">
+    <h3>Affirmative Speaker 1</h3>
+    <div style="text-indent: 1em">
+        Raw Score: <input>&nbsp
+        Deductions: <input>&nbsp
+        Notes: <input>
+    </div>
+</div>
+<div align="right">
+    <h3>Negative Speaker 1</h3>
+    <div style="text-indent: 1em">
+        Raw Score: <input>&nbsp
+        Deductions: <input>&nbsp
+        Notes: <input>
+    </div>
+</div>
+<div align="left">
+    <h3>Affirmative Speaker 2</h3>
+    <div style="text-indent: 1em">
+        Raw Score: <input>&nbsp
+        Deductions: <input>&nbsp
+        Notes: <input>
+    </div>
+</div>
+<div align="right">
+    <h3>Negative Speaker 2</h3>
+    <div style="text-indent: 1em">
+        Raw Score: <input>&nbsp
+        Deductions: <input>&nbsp
+        Notes: <input>
+    </div>
+</div>

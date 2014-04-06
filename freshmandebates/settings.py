@@ -14,10 +14,10 @@ ADMINS = (
 MANAGERS = ADMINS
 
 # check for production
-#if socket.gethostname() == 'LAMP':
-#    DATABASES = envvars.DATABASES
-if False:
-    print "What?"
+if socket.gethostname() == 'LAMP':
+    print "Wassup"
+    #TODO, figure out what envvars is
+    #DATABASES = envvars.DATABASES
 else:
     DATABASES = {
         'default': {
@@ -169,10 +169,10 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 
-LOGIN_REDIRECT_URL = '/SplashPage'
+LOGIN_REDIRECT_URL = '/splash'
 LOGIN_ERROR_URL = '/login-error/'
 LOGIN_URL = '/login/'
-SOCIAL_AUTH_NEW_USER_REDIRECT_URL = '/NewUserLogIn'
+SOCIAL_AUTH_NEW_USER_REDIRECT_URL = '/new_user_login'
 SOCIAL_AUTH_COMPLETE_URL_NAME  = 'socialauth_complete'
 SOCIAL_AUTH_ASSOCIATE_URL_NAME = 'socialauth_associate_complete'
 SOCIAL_AUTH_UID_LENGTH = 222

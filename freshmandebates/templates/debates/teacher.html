@@ -21,25 +21,25 @@
 	</h1>"Date and Location"</h1>	
 	<div id="ScoreBox">
 		<h2>
-			Slide Show Average: {{Team.SlideShowScore}}
+			Slide Show Average: {{ score.slideshow|floatformat:2 }}
 			<br>
 			<br>
 			<!-- Include Speaker's name somehow-->
-			Speaker 1 Average: {{Team.Speaker1}}
+			Speaker 1 Average: {{ score.speaker1|floatformat:2 }}
 			<br>
 			<br>
 			<!-- Include Speaker's name somehow-->
-			Speaker 2 Average: {{Team.Speaker2}}
+			Speaker 2 Average: {{ score.speaker2|floatformat:2 }}
 			<br>
 			<br>
-			Group Argument Average: {{Team.Argument}}
+			Group Argument Average: {{ score.argument|floatformat:2 }}
 			<br>
 			<br>
-			Cross Examination Average: {{Team.CrossExamintion}}
+			Cross Examination Average: {{ score.cross_examination|floatformat:2 }}
 			<br>
 			<br>
 			<!-- Include Speaker's name somehow-->
-			Rebuttal Average: "Data"
+            Rebuttal Average: {{ score.rebuttal|floatformat:2 }}
 			<br>
 			<br>
 		</h2>

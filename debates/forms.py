@@ -1,9 +1,6 @@
 from django         import forms
 from django.db      import models
-from debates.models import GoogleUser
-from django.forms   import ModelForm
-from debates.models import Form
-from django.forms   import CheckboxSelectMultiple
+from debates.models import GoogleUser, Score
 
 SCORE_CHOICES = (
         ('5','5'),
@@ -22,41 +19,42 @@ ROLE_CHOICES = (
     )
 scores = forms.ChoiceField(widget=forms.RadioSelect(), choices=SCORE_CHOICES)
 
-
-class OverallScore(ModelForm):
-    SlideShowScore   = scores.choices
-    Speaker1         = scores.choices
-    Speaker2         = scores.choices
-    CrossExamination = scores.choices
-    Argument         = scores.choices
-    Rebuttal         = scores.choices
-    #isAff           = ?
+class ScoreForm(forms.ModelForm):
+    slideshow         = scores.choices
+    speaker1          = scores.choices
+    speaker2          = scores.choices
+    cross_examination = scores.choices
+    argument          = scores.choices
+    rebuttal          = scores.choices
+    team_number       = models.CharField(max_length=2)
+    notes             = models.CharField(max_length=150)
     class Meta:
-        model = Form
+        model = Score
 
-class RegistrationForm(ModelForm):
-    FirstName = models.CharField(max_length=255)
-    LastName  = models.CharField(max_length=255)
-    role      = models.CharField(max_length=2, choices=ROLE_CHOICES)
-    email     = models.CharField(max_length=30)
-    password  = models.CharField(max_length=255)
+class RegistrationForm(forms.ModelForm):
+    first_name = models.CharField(max_length=255)
+    last_name  = models.CharField(max_length=255)
+    role       = models.CharField(max_length=2, choices=ROLE_CHOICES)
+    email      = models.CharField(max_length=30)
+    password   = models.CharField(max_length=255)
     class Meta:
         model = GoogleUser
 
 class ImportExcelForm(forms.Form):
     file = forms.FileField()
     def save(self):
-        records = csv.reader(self.cleaned_data('file'), delimiter=',', quotechar='"')
-        for line in record:
-            if row[0] != 'Student Name': # Ignore the header row, import everything else
+        records = csv.reader(self.cleaned_data('file'), delimiter=',',
+                             quotechar='"')
+        for row in record:
+            # Ignore the header row, import everything else
+            if row[0] != 'Student Name':
                 if row[0] != input_student.fullname:
-                    englishTeacher = row[2]
-                    englishTeacherGet = GoogleUser.objects.get(last_name = englishTeacher)
+                    english_teacher = GoogleUser.objects.get(last_name = row[2])
+                    #TODO, find function
                     input_student = student()
-                    fullname  = row[0]
-                    splitName = fullname.split(',' , 1)
-                    input_student.first_name = splitName[1]
-                    input_student.last_name  = splitName[0]
+                    split_name = row[0].split(',' , 1)
+                    input_student.first_name = split_name[1]
+                    input_student.last_name  = split_name[0]
                     input_data.save()
                         
 class UploadFileForm(forms.Form):
@@ -64,7 +62,7 @@ class UploadFileForm(forms.Form):
     file  = forms.FileField()
         
         
-#class Team(ModelForm):
+#class Team(forms.ModelForm):
 #    DebateTopic      = 
 #    Side             = 
 #    TeamNumber       = 

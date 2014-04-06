@@ -1,16 +1,14 @@
 from django.contrib.admin      import autodiscover, ModelAdmin, site
 from django.db                 import models
 from debates.models            import (
-                                          Topic, Location, Date,
-                                          SubmittedOverallScore, School,
-                                          GoogleUser, Student, Team,
-                                          Debate, Period,
-                                          #StudentAdmin, TeamAdmin
+                                          Topic, Location, Date, Score, School,
+                                          GoogleUser, Student, Team, Debate,
+                                          Period,
                                       )
-from debates.forms             import (
-                                          OverallScore, RegistrationForm,
-                                          ImportExcelForm, UploadFileForm
-                                      )
+#from debates.forms             import (
+#                                          ScoreForm, RegistrationForm,
+#                                          ImportExcelForm, UploadFileForm
+#                                      )
 
 autodiscover()
 
@@ -18,12 +16,12 @@ autodiscover()
 
 class TeamAdmin(ModelAdmin):
     list_filter = ['teacher']
-    ordering    = ['team_Number']
+    ordering    = ['team_number']
 
 class StudentAdmin(ModelAdmin):
-    list_display = ('last_name', 'first_name','englishTeacher','IHSTeacher')
+    list_display = ('last_name', 'first_name','english_teacher','ihs_teacher')
     ordering     = ['last_name']
-    list_filter  = ['englishTeacher','IHSTeacher','englishPeriod']
+    list_filter  = ['english_teacher','ihs_teacher','english_period']
 
 class DateAdmin(ModelAdmin):
     ordering = ['date']
@@ -32,11 +30,11 @@ class DateAdmin(ModelAdmin):
 site.register(Topic)
 site.register(Location)
 site.register(Date)
-site.register(SubmittedOverallScore)
+site.register(Score)
 site.register(School)
 site.register(GoogleUser)
-site.register(Student)#, StudentAdmin)
-site.register(Team)#, TeamAdmin)
+site.register(Student, StudentAdmin)
+site.register(Team, TeamAdmin)
 site.register(Debate)
 site.register(Period)
 
