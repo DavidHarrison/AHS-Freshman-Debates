@@ -1,0 +1,10 @@
+{% extends "debates/base.html" %}
+
+{% block content %}
+<form method="post" id="<something>">
+    {% csrf_token %}
+    {{ form.upload_file }}
+    <br>
+    <input type="submit" name="<something>"/>
+</form>
+{% endblock %}

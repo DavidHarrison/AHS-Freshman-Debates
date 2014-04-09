@@ -1,7 +1,11 @@
-from django         import forms
-from django.db      import models
-from debates.models import GoogleUser, Score
+#!/usr/bin/env python3.4
+#file: forms.py
 
+from django.forms   import ModelForm, ChoiceField, RadioSelect, Form
+from django.db      import models
+from debates.models import GoogleUser, Score, Team, UploadFile
+
+'''
 SCORE_CHOICES = (
         ('5','5'),
         ('6','6'),
@@ -17,60 +21,21 @@ ROLE_CHOICES = (
         ('3', 'Student'),
         ('4', 'Admin'),
     )
-scores = forms.ChoiceField(widget=forms.RadioSelect(), choices=SCORE_CHOICES)
+scores = ChoiceField(widget=RadioSelect(), choices=SCORE_CHOICES)
+'''
 
-class ScoreForm(forms.ModelForm):
-    slideshow         = scores.choices
-    speaker1          = scores.choices
-    speaker2          = scores.choices
-    cross_examination = scores.choices
-    argument          = scores.choices
-    rebuttal          = scores.choices
-    team_number       = models.CharField(max_length=2)
-    notes             = models.CharField(max_length=150)
+class ScoreForm(ModelForm):
     class Meta:
         model = Score
 
-class RegistrationForm(forms.ModelForm):
-    first_name = models.CharField(max_length=255)
-    last_name  = models.CharField(max_length=255)
-    role       = models.CharField(max_length=2, choices=ROLE_CHOICES)
-    email      = models.CharField(max_length=30)
-    password   = models.CharField(max_length=255)
+class RegistrationForm(ModelForm):
     class Meta:
         model = GoogleUser
 
-class ImportExcelForm(forms.Form):
-    file = forms.FileField()
-    def save(self):
-        records = csv.reader(self.cleaned_data('file'), delimiter=',',
-                             quotechar='"')
-        for row in record:
-            # Ignore the header row, import everything else
-            if row[0] != 'Student Name':
-                if row[0] != input_student.fullname:
-                    english_teacher = GoogleUser.objects.get(last_name = row[2])
-                    #TODO, find function
-                    input_student = student()
-                    split_name = row[0].split(',' , 1)
-                    input_student.first_name = split_name[1]
-                    input_student.last_name  = split_name[0]
-                    input_data.save()
-                        
-class UploadFileForm(forms.Form):
-    title = forms.CharField(max_length=50)
-    file  = forms.FileField()
-        
-        
-#class Team(forms.ModelForm):
-#    DebateTopic      = 
-#    Side             = 
-#    TeamNumber       = 
-#    TeamName         = 
-#    SlideShowSpeaker = 
-#    Speaker1         = 
-#    Speaker2         = 
-#    CrossExamination = 
-#    Rebuttal         = 
-#    class Meta:
-#        model = Team
+class TeamForm(ModelForm):
+    class Meta:
+        model = Team
+
+class UploadFileForm(Form):
+    class Meta:
+        model = UploadFile

@@ -1,26 +1,15 @@
+#!/usr/bin/env python3.4
+#file: models.py
+
 from   django.db.models            import (
                                               BooleanField, CharField,
                                               DateTimeField, TextField,
                                               ForeignKey, IntegerField,
                                               ManyToManyField, EmailField,
-                                              Model, Manager
+                                              FileField, Model, Manager
                                           )
-from   django.contrib.auth.models  import Group
-from   django.contrib.auth.models  import User
-from   django.contrib              import admin
-from   django.core.urlresolvers    import reverse
-from   django.forms.extras.widgets import SelectDateWidget
-import datetime
-from   django.utils.timezone       import utc
-import pytz
 from   django.utils                import timezone
 import logging
-#probably more work than its worth, see load.py in freshman debates for parser
-#from   csvImporter.model           import CsvDbModel
-from   django.forms                import CheckboxSelectMultiple
-from   django.forms.models         import ModelMultipleChoiceField
-from   django                      import forms
-from   django.forms.widgets        import RadioSelect, CheckboxSelectMultiple
 
 logger             = logging.getLogger('logview.debugger')
 #DEBATE_DAY_CHOICES = ('1st', '2nd')
@@ -43,7 +32,8 @@ ROLE_CHOICES = (
         ('4', 'Admin'),
     )
 
-class School(Model):#Also admin
+#Also admin
+class School(Model):
     name        = CharField(max_length=25)
     district    = CharField(max_length=25)
     description = CharField(max_length=150)
@@ -51,14 +41,14 @@ class School(Model):#Also admin
     #is_staff    = BooleanField(('staff status'),default=True)
 
     def __unicode__(self):
-        return u'%s' % self.name
+        return '%s' % self.name
             
 class Topic(Model):
-    topic       = CharField(max_length=25)
+    name        = CharField(max_length=25)
     description = CharField(max_length=150)
 
     def __unicode__(self):
-        return u'%s' % self.topic
+        return '%s' % self.topic
 
 class GoogleUser(Model):
     first_name  = CharField(max_length=50)
@@ -69,25 +59,25 @@ class GoogleUser(Model):
     date_joined = DateTimeField("date joined", default=timezone.now)
 
     def __unicode__(self):
-        return u'%s' % self.last_name
+        return '%s' % self.last_name
 
 class Student(Model):
     first_name      = CharField(max_length=255)
     last_name       = CharField(max_length=255)
     english_teacher = ForeignKey(GoogleUser,
-                                       related_name='EnglishTeacher')
+                                 related_name='EnglishTeacher')
     english_period  = CharField(max_length=255)
     ihs_teacher     = ForeignKey(GoogleUser,
-                                       related_name='IHSTeacher')
+                                 related_name='IHSTeacher')
     ihs_period      = CharField(max_length=255)
 
     def __unicode__(self):
-        return u'%s' % self.last_name + ', ' + self.first_name
-
-    #class Meta:
-        #app_label="classes"
+        return '%s' % self.last_name + ', ' + self.first_name
 
 class Team(Model):
+    #TODO, are these redundant to the roles? If not, could they be done as
+    #a list?
+    '''
     student1            = ForeignKey(Student,
                                   related_name='student1_type')
     student2            = ForeignKey(Student,
@@ -99,7 +89,9 @@ class Team(Model):
     student5            = ForeignKey(Student,
                                   related_name='student5_type',
                                   blank = True)
+    '''
     #Start of roles -- getting students names tied into roles.
+    '''
     speaker1            = ForeignKey(Student,
                                   related_name='student_speaker1_type',
                                   blank=True)
@@ -115,8 +107,15 @@ class Team(Model):
     rebutter            = ForeignKey(Student,
                                   related_name='student_rebutt_type',
                                   blank=True)
+    '''
+    speaker1            = CharField(max_length=50)
+    speaker2            = CharField(max_length=50)
+    cross_examiner      = CharField(max_length=50)
+    slideshow_presenter = CharField(max_length=50)
+    rebutter            = CharField(max_length=50)
     #End of roles
     team_number         = CharField(max_length=20)
+    team_name           = CharField(max_length=50)
     topic               = ForeignKey(Topic)
     school              = ForeignKey(School)
     #Is aff? True/False    
@@ -124,7 +123,7 @@ class Team(Model):
     teacher             = ForeignKey(GoogleUser)
 
     def __unicode__(self):
-        return u'%s' % self.team_number
+        return '%s' % self.team_number
 
 class Score(Model):
     speaker1          = CharField(max_length=2, choices=SCORE_CHOICES,
@@ -144,25 +143,25 @@ class Score(Model):
     is_aff            = BooleanField(default = False)
 
     def __unicode__(self):
-        return u'%s' % self.team_number
+        return '%s' % self.team_number
 
 class Location(Model):
     location = CharField(max_length=255)
 
     def __unicode__(self):
-        return u'%s' % self.location
+        return '%s' % self.location
 
 class Period(Model):
     period = IntegerField(max_length=2)
 
     def __unicode__(self):
-        return u'%s' % self.period
+        return '%s' % self.period
     
 class Date(Model):
     date = DateTimeField()
 
     def __unicode__(self):
-        return u'%s' % self.date
+        return '%s' % self.date
 
 class Debate(Model):
     #Affirmative team
@@ -183,4 +182,7 @@ class Debate(Model):
     spectators  = ManyToManyField(Team, blank=True)
 
     def __unicode__(self):
-        return u'%s' % self.topic
+        return '%s' % self.topic
+
+class UploadFile(Model):
+    upload_file = FileField(upload_to="file")

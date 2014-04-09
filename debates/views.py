@@ -1,29 +1,19 @@
-from   django.shortcuts               import render
-from   debates.models                 import (
-                                                 Topic, Location, Date, User,
-                                                 Score, GoogleUser, Student,
-                                                 Team
-                                             )
-from   debates.forms                  import (
-                                                 ScoreForm,
-                                                 RegistrationForm,
-                                                 ImportExcelForm
-                                             )
-from   freshmandebates.assign_scores  import averageScores
-from   django.shortcuts               import render_to_response
-from   django.http                    import (
-                                                 HttpResponseRedirect,
-                                                 HttpResponse,
-                                                 HttpResponseServerError
-                                             )
-from   django.contrib.auth.decorators import (
-                                                 login_required,
-                                                 user_passes_test
-                                             )
-from   django.contrib.auth.models     import User
-from   django.forms.extras.widgets    import SelectDateWidget
-import datetime
-from   django.utils.timezone          import utc
+#!/usr/bin/env python3.4
+#file: views.py
+
+from   django.shortcuts       import render
+from   debates.models         import (
+                                         Topic, Location, Date, Score,
+                                         GoogleUser, Student, Team
+                                     )
+from   debates.forms          import (
+                                         ScoreForm, TeamForm,
+                                         RegistrationForm, UploadFileForm
+                                     )
+from   debates.assign_scores  import averageScores
+from   debates.load           import parseDebaters
+from   django.shortcuts       import render_to_response
+from   django.template        import RequestContext
 import logging
 
 logger = logging.getLogger('logview.debugger')
@@ -32,6 +22,7 @@ logger = logging.getLogger('logview.debugger')
 def judge(request):
     aff_form = ScoreForm()
     neg_form = ScoreForm()
+    #TODO, what should happen with this
     if request.method == 'GET':
         pass
     elif request.method == 'POST':
@@ -52,7 +43,7 @@ def judge(request):
                 'affirmative_form': aff_form,
                 'negative_form':    neg_form
             }
-    return render(request,'debates/judge.html', forms)
+    return render(request, 'debates/judge.html', forms)
 
 def new_user(request):
     if request.method == 'POST':
@@ -76,71 +67,92 @@ def new_user(request):
         form = RegistrationForm()
     return render(request, 'debates/new_user.html', {'Form': form,})
 
-def handle(request):
-    aff_scores = Affirmative.objects.all()
-    aff_scores = Negative.objects.all()
-    return render(request,'debates/scoring_upload.html',
+#TODO, what needs to happen with this?
+def scoring_upload(request):
+    aff_scores = Score.objects.filter(is_aff = True)
+    neg_scores = Score.objects.filter(is_aff = False)
+    return render(request, 'debates/scoring_upload.html',
                   {
                       'affirmative_scores': aff_scores,
                       'negative_scores':    neg_scores,
                   })
 
 def splash(request):
-    return render(request,'debates/splash.html')
+    return render_to_response('debates/splash.html', RequestContext(request))
 
 def teacher(request):
     #testing it out
     tn = 5
+    team = Team.objects.filter(team_number = tn)
     judge_scores = Score.objects.filter(team_number = tn)
     avg_score = averageScores(judge_scores)
-    return render(request,'debates/teacher.html', {'score': avg_score})
+    return render(request, 'debates/teacher.html', {'team':  team,
+                                                    'score': avg_score})
 
-def teacherselector(request):
-    return render(request,'debates/teacher_selector.html')
+def teacher_selector(request):
+    return render(request, 'debates/teacher_selector.html')
 
-def teamcreate(request):
-    Submit_form = 'null'
-    new_team = Team()
-    return render(request,'debates/team_create.html')
+def team_create(request):
+    form = TeamForm()
+    #TODO, what should happen with this
+    if request.method == 'GET':
+        pass
+    elif request.method == 'POST':
+        form = TeamForm(request.POST)
+        #TODO, what should happen if this fails?
+        if form.is_valid():
+            s = form.save()
+            logger.debug(s.team_number)
+            s.save()
+    debaters = list(Student.objects.all())
+    topics   = list(Topic.objects.all())
+    context = {
+                  'form': form,
+                  'topics': topics,
+                  'debaters': debaters
+              }
+    return render(request, 'debates/team_create.html', context)
 
-def debateselector(request):
-    return render(request,'debates/debate_selector.html')
+def debate_selector(request):
+    return render(request, 'debates/debate_selector.html')
 
-def test_flowcell(request):
+def import_debaters(request):
+    logger.debug("importing debaters")
+    form = UploadFileForm()
     # If the form has been submitted...
     if request.method == 'POST':
+        logger.debug("method: POST")
         # A form bound to the POST data
-        form = ImportExcelForm(request.POST, request.FILES)
+        form = UploadFileForm(request.POST, request.FILES)
         # All validation rules pass
         if form.is_valid():
-            parser = ExcelParser()
-            success, log = parser.read_excel(request.FILES['file'] )
-            if success:
-                # redirects to aliquot page ordered by the most recent
-                return redirect(reverse('admin:index')
-                                + "pages/flowcell_good/")
-            else:
-                errors = '* Problem with flowcell * <br><br>log details below:<br>' + "<br>".join(log)
-    else:
-        # An unbound form
-        form = ImportExcelForm()
-    return render(request,'debates/file_upload.html',{'form': form})
+            logger.debug("form is valid")
+            f = form.save()
+            debaters = parseDebaters(f.upload_file)
+            for d in debaters:
+                d.save()
+        #TODO, render failure
+        else:
+            logger.debug("form is invalid")
+            logger.debug("file: " + str(form.upload_file))
+    return render(request, 'debates/file_upload.html', {'form': form})
 
-#def CSVUpload(request):
-#    if request.method == 'POST':
-#        form = MyForm(request.POST, request.FILES)
-#        if form.is_valid():
-#            uploaded_file = request.FILES['html-file-attribute-name']
-#            # Write the file to disk
-#            fout = open("path/to/save/file/to/%s" % uploaded_file.name, 'wb')
-#            for chunk in uploaded_file.chunks():
-#                fout.write(chunk)
-#            fout.close()
-#            
-#        else:
-#             form = codeUploadForm()
-#             context = {'form': form}
-#             return render_to_response('import.html', context,
-#                                       context_instance=RequestContext(
-#                                           request))
-#    return render(request,{})
+'''
+def upload(request):
+    if request.method == 'POST':
+        form = UploadFileForm(request.POST, request.FILES)
+        if form.is_valid():
+            uploaded_file = request.FILES['html-file-attribute-name']
+            # Write the file to disk
+            #fout = open("path/to/save/file/to/%s" % uploaded_file.name, 'wb')
+            #for chunk in uploaded_file.chunks():
+            #    fout.write(chunk)
+            #fout.close()
+        else:
+            form = codeUploadForm()
+            context = {'form': form}
+            return render_to_response('import.html', context,
+                                       context_instance=RequestContext(
+                                                            request))
+    return render(request, 'debates/upload_csv.html')
+'''

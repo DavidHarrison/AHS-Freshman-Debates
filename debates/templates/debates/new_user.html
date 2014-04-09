@@ -1,0 +1,47 @@
+{% extends "debates/base.html" %}
+
+{% block head_scripts %}
+<script type="text/javascript">
+jQuery(function() {
+
+        var form = jQuery("#form")
+        console.log (form)
+        form.submit(function(e){
+            jQuery("#sendbutton").attr('disabled', true)
+            jQuery("#sendwrapper").prepend('<span>Sending message, please wait... </span>')
+            jQuery("#ajaxwrapper").load(
+                form.attr('action') + ' #ajaxwrapper',
+                formserializeArray(),
+                function(responseText, responseStatus) {
+                    jQuery("#sendbutton").attr('disabled', false)
+                }
+
+            );
+            e.preventDefault();
+        });
+    });
+
+});
+</script>
+{% endblock %}
+
+{% block content %}
+<div id="Boxes">
+        <div id="RegistrationForm">
+            <h1>Register</h1>
+            <br>
+                <form method='post' id="form">
+                <div id="ajaxwrapper">
+                    {% csrf_token %}
+                    <br>
+                    <br>
+                    <ul>
+                    {{ Form.as_p }}
+                    <input type="hidden" name="form" value="form">
+                    </ul>
+                    <p id="sendwrapper"><input type='submit' value='Submit' /></p>
+                </div>
+            </form>
+        </div>
+</div>
+{% endblock %}

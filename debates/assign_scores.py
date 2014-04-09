@@ -1,23 +1,24 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.4
 #file: assign_scores.py
 
-#import logging
 import sys
 import os
+
+#your_djangoproject_home="/home/djrh/Programming/AHS-Freshman-Debates"
+#sys.path.append(your_djangoproject_home)
+#os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
+
+#import logging
 from   debates.models import Score, Team
 
 #logger = logging.getLogger('logview.debugger')
 # Full path to your django project directory
-#your_djangoproject_home="/AHS-Freshmen-Debates/freshmandebates/"
-#sys.path.append(your_djangoproject_home)
-#os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 
 def scoresToFile():
     scores = list(Score.objects.all())
     teams  = list(Team.objects.all())
     for t in teams:
-        judge_scores = list(filter(lambda s: s.team_number == t.team_number,
-                                   scores))
+        judge_scores = list([s for s in scores if s.team_number == t.team_number])
         avg_score = averageScores(judge_scores)
         writeScoreToFile(t.team_number, avg_score)
 

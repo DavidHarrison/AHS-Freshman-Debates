@@ -1,6 +1,10 @@
-# Django settings for freshmandebates project.
+#!/usr/bin/env python3.4
+#file: settings.py
+
+# Django settings for debates project.
 import os
 import socket
+#TODO, figure out what envvars is
 #import envvars
 
 DEBUG = True
@@ -15,8 +19,8 @@ MANAGERS = ADMINS
 
 # check for production
 if socket.gethostname() == 'LAMP':
-    print "Wassup"
-    #TODO, figure out what envvars is
+    pass
+    #see envvar import
     #DATABASES = envvars.DATABASES
 else:
     DATABASES = {
@@ -24,7 +28,7 @@ else:
             # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
             'ENGINE': 'django.db.backends.sqlite3',
             # Or path to database file if using sqlite3.
-            'NAME': 'dev.db',
+            'NAME': 'debates.db',
             # The following settings are not used with sqlite3:
             'USER': '',
             'PASSWORD': '',
@@ -84,7 +88,7 @@ STATIC_URL = '/static/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
-    PROJECT_ROOT + "/freshmandebates/static/",
+    PROJECT_ROOT + "/debates/static/",
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
@@ -114,18 +118,18 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'social_auth.middleware.SocialAuthExceptionMiddleware',
+    'social.apps.django_app.middleware.SocialAuthExceptionMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-ROOT_URLCONF = 'freshmandebates.urls'
+ROOT_URLCONF = 'debates_site.urls'
 
 # Python dotted path to the WSGI application used by Django's runserver.
-WSGI_APPLICATION = 'freshmandebates.wsgi.application'
+WSGI_APPLICATION = 'debates_site.wsgi.application'
 
 TEMPLATE_DIRS = (
-    PROJECT_ROOT + "/freshmandebates/templates/"
+    PROJECT_ROOT + "/debates/templates/"
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
@@ -146,7 +150,7 @@ INSTALLED_APPS = (
     'debates',
     #'debates.models.User',
     #'django_openid_auth',
-    'social_auth',
+    'social.apps.django_app.default',
     #'admin_import',
 )
 
@@ -162,10 +166,10 @@ INSTALLED_APPS = (
 # Check for new groups, or only on initial user creation
 GAPPS_ALWAY_ADD_GROUPS = False
 AUTHENTICATION_BACKENDS = (
-    #'social_auth.backends.google.GoogleOAuthBackend',
-    #'social_auth.backends.CustomGoogleBackend.CustomGoogleBackend',
-    'social_auth.backends.google.GoogleOAuth2Backend',
-    # 'social_auth.backends.google.GoogleBackend'
+    #'social.backends.google.GoogleOAuth',
+    #'social.backends.CustomGoogleBackend.CustomGoogle',
+    'social.backends.google.GoogleOAuth2',
+    # 'social.backends.google.Google'
     'django.contrib.auth.backends.ModelBackend',
 )
 
@@ -186,8 +190,8 @@ OPENID_SSO_SERVER_URL = 'https://www.google.com/accounts/o8/id'
 
 # TEMPLATE_CONTEXT_PROCESSORS = (
 #     'django.contrib.auth.context_processors.auth',
-#     'social_auth.context_processors.social_auth_by_type_backends',
-#     'social_auth.context_processors.social_auth_backends',
+#     'social.context_processors.social_auth_by_type_backends',
+#     'social.context_processors.social_auth_backends',
 #     'django.core.context_processors.static',
 # )
 
@@ -201,13 +205,13 @@ SOCIAL_AUTH_USERNAME_IS_FULL_EMAIL = True
 #AUTH_USER_MODEL = 'debates.models.User'
 
 SOCIAL_AUTH_PIPELINE = (
-    'social_auth.backends.pipeline.social.social_auth_user',
-    'social_auth.backends.pipeline.associate.associate_by_email',
-    'social_auth.backends.pipeline.user.get_username',
-    'social_auth.backends.pipeline.user.create_user',
-    'social_auth.backends.pipeline.social.associate_user',
-    'social_auth.backends.pipeline.social.load_extra_data',
-    'social_auth.backends.pipeline.user.update_user_details'
+    'social.backends.pipeline.social.social_auth_user',
+    'social.backends.pipeline.associate.associate_by_email',
+    'social.backends.pipeline.user.get_username',
+    'social.backends.pipeline.user.create_user',
+    'social.backends.pipeline.social.associate_user',
+    'social.backends.pipeline.social.load_extra_data',
+    'social.backends.pipeline.user.update_user_details'
 )
 
 #project id = thinking-volt-426

@@ -1,0 +1,22 @@
+<!doctype html>
+<html>
+<head>
+	<title>AHS Debates</title>
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}DebateSite.css">
+    {% block head_scripts %}{% endblock %}
+</head>
+<body>
+	<div class="Banner">
+		Albany High School Freshman Debates
+        {% if logged_in %}
+        <!-- display login name and logout button -->
+        {% else %}
+        {% comment %}
+        <a href="{% url 'social:begin' "google-oauth2" %}">Login with Google</a>
+        {% endcomment %}
+        {% endif %}
+	</div>
+    {% block content %}{% endblock %}
+    {% block scripts %}{% endblock %}
+</body>
+</html>

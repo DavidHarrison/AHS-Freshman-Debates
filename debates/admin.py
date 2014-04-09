@@ -1,3 +1,6 @@
+#!/usr/bin/env python3.4
+#file admin.py
+
 from django.contrib.admin      import autodiscover, ModelAdmin, site
 from django.db                 import models
 from debates.models            import (
@@ -5,10 +8,6 @@ from debates.models            import (
                                           GoogleUser, Student, Team, Debate,
                                           Period,
                                       )
-#from debates.forms             import (
-#                                          ScoreForm, RegistrationForm,
-#                                          ImportExcelForm, UploadFileForm
-#                                      )
 
 autodiscover()
 

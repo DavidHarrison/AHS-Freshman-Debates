@@ -55,3 +55,9 @@ envvars.py
 
 # Temporary Files
 *.swp
+
+# data files
+*.csv
+
+# scripts
+*.hs
