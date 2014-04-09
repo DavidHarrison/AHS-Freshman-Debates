@@ -5,14 +5,11 @@ Judging App for Albany High School Freshman Renewal Debates.
 - 
 
 # Requirements
-- [Python](https://www.python.org/downloads/) 2.x (?)
+- [Python](https://www.python.org/downloads/) 3.x
 
 ## Available Through PyPi
 - [Django](https://www.djangoproject.com/) ([Django](https://pypi.python.org/pypi/Django/))
-- envvars (?)
-- Django Social Auth ([django-social-auth](https://pypi.python.org/pypi/django-social-auth/))
-- pytz ([pytz](https://pypi.python.org/pypi/pytz/))
-- Django CSV Importer ([csvImporter](https://pypi.python.org/pypi/csvImporter/))
+- Python Social Auth ([python-social-auth](https://pypi.python.org/pypi/python-social-auth/))
 
 # Setup
 - ./manage.py syncdb (initialize database tables)

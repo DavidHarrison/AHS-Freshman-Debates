@@ -4,7 +4,7 @@
 # Django settings for debates project.
 import os
 import socket
-#TODO, figure out what envvars is
+#private environment variable, not pushed to Git
 #import envvars
 
 DEBUG = True
