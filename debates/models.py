@@ -1,27 +1,26 @@
-#!/usr/bin/env python3.4
+#!/usr/bin/env python2.7
 #file: models.py
 
-from   django.db.models            import (
-                                              BooleanField, CharField,
-                                              DateTimeField, TextField,
-                                              ForeignKey, IntegerField,
-                                              ManyToManyField, EmailField,
-                                              FileField, Model, Manager
-                                          )
-from   django.utils                import timezone
-import logging
+from django.db.models import (
+                                 BooleanField, CharField, DateTimeField,
+                                 TextField, ForeignKey, IntegerField,
+                                 ManyToManyField, EmailField, FileField,
+                                 Model, Manager
+                             )
+from django.utils     import timezone
+from logging          import getLogger
 
-logger             = logging.getLogger('logview.debugger')
+logger = getLogger(u'logview.debugger')
+
 #DEBATE_DAY_CHOICES = ('1st', '2nd')
 #PERIOD_CHOICES     = ('1', '2', '3', '4', '5', '6', '7')
 #LOCATION_CHOICES   = ('Library', 'Little Theatre', 'Other Location')
-
 SCORE_CHOICES = (
-        ('5', '5'),
-        ('6', '6'),
-        ('7', '7'),
-        ('8', '8'),
-        ('9', '9'),
+        ('5',  '5'),
+        ('6',  '6'),
+        ('7',  '7'),
+        ('8',  '8'),
+        ('9',  '9'),
         ('10', '10'),
     )
 ROLE_CHOICES = (
@@ -61,14 +60,17 @@ class GoogleUser(Model):
     def __unicode__(self):
         return '%s' % self.last_name
 
+#TODO, should probably be changed to Debater (Judges are also students)
 class Student(Model):
     first_name      = CharField(max_length=255)
     last_name       = CharField(max_length=255)
-    english_teacher = ForeignKey(GoogleUser,
-                                 related_name='EnglishTeacher')
+    #english_teacher = ForeignKey(GoogleUser,
+    #                             related_name=u'EnglishTeacher')
+    english_teacher = CharField(max_length=255)
     english_period  = CharField(max_length=255)
-    ihs_teacher     = ForeignKey(GoogleUser,
-                                 related_name='IHSTeacher')
+    #ihs_teacher     = ForeignKey(GoogleUser,
+    #                             related_name=u'IHSTeacher')
+    ihs_teacher     = CharField(max_length=255)
     ihs_period      = CharField(max_length=255)
 
     def __unicode__(self):
@@ -165,9 +167,9 @@ class Date(Model):
 
 class Debate(Model):
     #Affirmative team
-    affirmative = ForeignKey(Team, related_name='team_affirmative_type')
+    affirmative = ForeignKey(Team, related_name=u'team_affirmative_type')
     #Negative team
-    negative    = ForeignKey(Team, related_name='team_negative_type')
+    negative    = ForeignKey(Team, related_name=u'team_negative_type')
     #date of debate
     date        = ForeignKey(Date)
     #Location of debate
@@ -183,6 +185,3 @@ class Debate(Model):
 
     def __unicode__(self):
         return '%s' % self.topic
-
-class UploadFile(Model):
-    upload_file = FileField(upload_to="file")
