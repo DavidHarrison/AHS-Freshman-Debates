@@ -12,7 +12,7 @@ logger = getLogger('logview.debugger')
 #TODO, use inbuilt functions
 class StudentResource(ModelResource):
     #CSV Fields
-    name      = Field(column_name='Student Name', readonly=True)
+    name      = Field(column_name='Student Name')
     period    = Field(column_name='Period',       readonly=True)
     teacher   = Field(column_name='Teacher.',     readonly=True)
     course_id = Field(column_name='Course.',      readonly=True)
@@ -21,26 +21,18 @@ class StudentResource(ModelResource):
         #assignment of .dict needed to carry data over into calling function
         dataset.dict = mergeDebaters(dataset).dict
 
-    #TODO, figure out what wasn't working about using the inbuilt version
-    def get_instance(self, instance_loader, row):
-        args = {}
-        for key in self.get_import_id_fields():
-            args[key] = row[key]
-        matches = Student.objects.filter(**args)
-        if len(matches) == 0:
-            return None
-        return matches[0]
-
+    '''
     #TODO, should this be user-defined?
     def init_instance(self, row):
         return Student(**row)
+    '''
 
     class Meta(object):
         model = Student
         #fields = ('first_name','last_name',
         #          'english_period','english_teacher',
-        #          'ihs_period','ihs_teacher'
-        exclude = ('Student Name', 'period', 'teacher', 'course', 'id')
+        #          'ihs_period','ihs_teacher')
+        exclude = ('name', 'period', 'teacher', 'course', 'id')
         import_id_fields = ['first_name', 'last_name']
 
 class TeacherResource(ModelResource):

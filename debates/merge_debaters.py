@@ -68,18 +68,18 @@ def mergeDebater(english, ihs):
         debater['english_period']  = english['period']
         debater['english_teacher'] = english['teacher']
     else:
-        debater['name']            = None
-        debater['english_period']  = None
-        debater['english_teacher'] = None
+        debater['name']            = ""
+        debater['english_period']  = ""
+        debater['english_teacher'] = ""
     if ihs != None:
         debater['name']        = ihs['name']
         debater['ihs_period']  = ihs['period']
         debater['ihs_teacher'] = ihs['teacher']
     else:
-        debater['ihs_period']  = None
-        debater['ihs_teacher'] = None
+        debater['ihs_period']  = ""
+        debater['ihs_teacher'] = ""
     #if both english and ihs are null, return None
-    if debater['name'] == None:
+    if debater['name'] == "":
         return None
     #otherwise, return the constructed debater dict (may have None fields)
     return debater
