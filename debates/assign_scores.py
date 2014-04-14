@@ -49,6 +49,8 @@ def writeScoreToFile(team_number, score):
 
 #[Score] -> Score
 def averageScores(scores):
+    if len(scores) == 0:
+        return None
     #TODO, rewrite to use a dictionary and generically average terms
     total_rebuttal          = 0
     total_speaker1          = 0

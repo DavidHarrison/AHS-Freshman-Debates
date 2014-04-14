@@ -4,14 +4,10 @@
 from django.shortcuts       import render
 from debates.models         import (
                                        Topic, Location, Date, Score,
-                                       GoogleUser, Student, Team
+                                       GoogleUser, Debater, Team
                                    )
-from debates.forms          import (
-                                       ScoreForm, TeamForm,
-                                       RegistrationForm, UploadDebatersForm
-                                   )
+from debates.forms          import ScoreForm, TeamForm, RegistrationForm
 from debates.assign_scores  import averageScores
-from debates.load           import parseDebaters
 from django.shortcuts       import render_to_response
 from django.template        import RequestContext
 from logging                import getLogger
@@ -45,29 +41,6 @@ def judge(request):
             }
     return render(request, u'debates/judge.html', forms)
 
-def new_user(request):
-    if request.method == u'POST':
-        form = RegistrationForm(request.POST)
-        if form.is_valid():
-            #TODO, can this be done implicitly like above?
-            user              = GoogleUser()
-            user.first_name   = form.cleaned_data.get(u'first_name')
-            logger.debug(user.first_name)
-            user.last_name    = form.cleaned_data.get(u'last_name')
-            logger.debug(user.last_name)
-            user.email        = form.cleaned_data.get(u'email')
-            user.role         = form.cleaned_data.get(u'role')
-            user.password     = form.cleaned_data.get(u'password')
-            user.is_admin     = False
-            user.is_staff     = True
-            user.is_superuser = False
-            user.save()
-            user.create_user(user.first_name, user.last_name, user.email,
-                             user.password)
-    else:
-        form = RegistrationForm()
-    return render(request, u'debates/new_user.html', {u'Form': form,})
-
 #TODO, what needs to happen with this?
 def scoring_upload(request):
     aff_scores = Score.objects.filter(is_aff = True)
@@ -81,14 +54,15 @@ def scoring_upload(request):
 def splash(request):
     return render_to_response(u'debates/splash.html', RequestContext(request))
 
-def teacher(request):
+#TODO, add team selector and filter teams by teacher
+def view_scores(request):
     #testing it out
     tn = 5
     team = Team.objects.filter(team_number = tn)
     judge_scores = Score.objects.filter(team_number = tn)
     avg_score = averageScores(judge_scores)
-    return render(request, u'debates/teacher.html', {u'team':  team,
-                                                    u'score': avg_score})
+    return render(request, u'debates/view_scores.html', {u'team':  team,
+                                                         u'score': avg_score})
 
 def teacher_selector(request):
     return render(request, u'debates/teacher_selector.html')
@@ -105,7 +79,7 @@ def team_create(request):
             s = form.save()
             logger.debug(s.team_number)
             s.save()
-    debaters = list(Student.objects.all())
+    debaters = list(Debater.objects.all())
     topics   = list(Topic.objects.all())
     context = {
                   u'form': form,
@@ -114,5 +88,6 @@ def team_create(request):
               }
     return render(request, u'debates/team_create.html', context)
 
+#TODO, fill out
 def debate_selector(request):
     return render(request, u'debates/debate_selector.html')

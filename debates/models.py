@@ -27,7 +27,7 @@ ROLE_CHOICES = (
         ('0', 'School'),
         ('1', 'Teacher'),
         ('2', 'Judge'),
-        ('3', 'Student'),
+        ('3', 'Debater'),
         ('4', 'Admin'),
     )
 
@@ -61,7 +61,7 @@ class GoogleUser(Model):
         return '%s' % self.last_name
 
 #TODO, should probably be changed to Debater (Judges are also students)
-class Student(Model):
+class Debater(Model):
     first_name      = CharField(max_length=255)
     last_name       = CharField(max_length=255)
     #english_teacher = ForeignKey(GoogleUser,
@@ -85,33 +85,33 @@ class Team(Model):
     #TODO, are these redundant to the roles? If not, could they be done as
     #a list?
     '''
-    student1            = ForeignKey(Student,
+    student1            = ForeignKey(Debater,
                                   related_name='student1_type')
-    student2            = ForeignKey(Student,
+    student2            = ForeignKey(Debater,
                                   related_name='student2_type')
-    student3            = ForeignKey(Student,
+    student3            = ForeignKey(Debater,
                                   related_name='student3_type')
-    student4            = ForeignKey(Student,
+    student4            = ForeignKey(Debater,
                                   related_name='student4_type')
-    student5            = ForeignKey(Student,
+    student5            = ForeignKey(Debater,
                                   related_name='student5_type',
                                   blank = True)
     '''
     #Start of roles -- getting students names tied into roles.
     '''
-    speaker1            = ForeignKey(Student,
+    speaker1            = ForeignKey(Debater,
                                   related_name='student_speaker1_type',
                                   blank=True)
-    speaker2            = ForeignKey(Student,
+    speaker2            = ForeignKey(Debater,
                                   related_name='student_speaker2_type',
                                   blank=True)
-    cross_examiner      = ForeignKey(Student,
+    cross_examiner      = ForeignKey(Debater,
                                   related_name='student_cross_type',
                                   blank=True)
-    slideshow_presenter = ForeignKey(Student,
+    slideshow_presenter = ForeignKey(Debater,
                                   related_name='student_slide_type',
                                   blank=True)
-    rebutter            = ForeignKey(Student,
+    rebutter            = ForeignKey(Debater,
                                   related_name='student_rebutt_type',
                                   blank=True)
     '''

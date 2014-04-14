@@ -3,14 +3,13 @@
 
 from import_export.resources import ModelResource
 from import_export.fields    import Field
-from debates.models          import Student, GoogleUser
+from debates.models          import Debater, GoogleUser
 from debates.merge_debaters  import mergeDebaters
 from logging                 import getLogger
 
 logger = getLogger('logview.debugger')
 
-#TODO, use inbuilt functions
-class StudentResource(ModelResource):
+class DebaterResource(ModelResource):
     #CSV Fields
     name      = Field(column_name='Student Name')
     period    = Field(column_name='Period',       readonly=True)
@@ -21,14 +20,8 @@ class StudentResource(ModelResource):
         #assignment of .dict needed to carry data over into calling function
         dataset.dict = mergeDebaters(dataset).dict
 
-    '''
-    #TODO, should this be user-defined?
-    def init_instance(self, row):
-        return Student(**row)
-    '''
-
     class Meta(object):
-        model = Student
+        model = Debater
         #fields = ('first_name','last_name',
         #          'english_period','english_teacher',
         #          'ihs_period','ihs_teacher')
@@ -36,21 +29,5 @@ class StudentResource(ModelResource):
         import_id_fields = ['first_name', 'last_name']
 
 class TeacherResource(ModelResource):
-    #TODO, may be able to import directly
-    def before_import(dataset, dry_run):
-        for t in dataset:
-            teacher              = GoogleUser()
-            teacher.first_name   = dictionary['first name']
-            teacher.last_name    = dictionary['last name']
-            teacher.role         = 1
-            teacher.email        = dictionary['email']
-            #TODO, figure out proper way to use password for teachers
-            teacher.password     = "p_word"
-            teacher.is_admin     = False
-            teacher.is_staff     = True
-            teacher.is_superuser = False
-            if not dry_run:
-                teacher.save()
-
     class Meta(object):
         model = GoogleUser

@@ -2,7 +2,9 @@
 Judging App for Albany High School Freshman Renewal Debates.
 
 # TODO
-- 
+- Clean up admin debater import (hide csv fields).
+- Get Google authentication to work.
+    - Integrate it to give permissions.
 
 # Requirements
 - [Python](https://www.python.org/downloads/) 2.x

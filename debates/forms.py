@@ -5,7 +5,6 @@ from django.forms           import ModelForm, ChoiceField, RadioSelect, Form
 from django.db.models       import FileField
 from debates.models         import GoogleUser, Score, Team
 from debates.merge_debaters import mergeDebaters
-from debates.load           import loadDebaters
 
 u'''
 SCORE_CHOICES = (
@@ -20,7 +19,7 @@ ROLE_CHOICES = (
         ('0', 'School'),
         ('1', 'Teacher'),
         ('2', 'Judge'),
-        ('3', 'Student'),
+        ('3', 'Debater'),
         ('4', 'Admin'),
     )
 scores = ChoiceField(widget=RadioSelect(), choices=SCORE_CHOICES)
@@ -37,9 +36,3 @@ class RegistrationForm(ModelForm):
 class TeamForm(ModelForm):
     class Meta(object):
         model = Team
-
-class UploadDebatersForm(Form):
-    upload_file = FileField()
-
-    def save():
-       loadDebaters(mergeDebaters(upload_file)) 
