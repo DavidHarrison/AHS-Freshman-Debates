@@ -11,7 +11,7 @@ logger = getLogger('logview.debugger')
 
 class DebaterResource(ModelResource):
     #CSV Fields
-    name      = Field(column_name='Student Name')
+    name      = Field(column_name='Student Name', readonly=True)
     period    = Field(column_name='Period',       readonly=True)
     teacher   = Field(column_name='Teacher.',     readonly=True)
     course_id = Field(column_name='Course.',      readonly=True)
@@ -22,10 +22,10 @@ class DebaterResource(ModelResource):
 
     class Meta(object):
         model = Debater
-        #fields = ('first_name','last_name',
-        #          'english_period','english_teacher',
-        #          'ihs_period','ihs_teacher')
-        exclude = ('name', 'period', 'teacher', 'course', 'id')
+        export_order = ('first_name','last_name',
+                        'english_period','english_teacher',
+                        'ihs_period','ihs_teacher')
+        #exclude = ('name', 'period', 'teacher', 'course', 'id')
         import_id_fields = ['first_name', 'last_name']
 
 class TeacherResource(ModelResource):
