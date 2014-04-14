@@ -16,7 +16,6 @@ urlpatterns = patterns(u'',
     url(ur'^debate_selector$',     u'debates.views.debate_selector'),
     url(ur'^post/scoring_upload$', u'debates.views.scoring_upload'), 
     url(ur'^new_user_logIn$',      u'debates.views.new_user'),
-    url(ur'^import_debaters$',     u'debates.views.import_debaters'),
     url(ur'^new_user$',            u'debates.views.new_user'),
     #url(r'^add_students$',       'debates.views.databasesetup', name = 'data'),
 

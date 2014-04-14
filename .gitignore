@@ -57,7 +57,4 @@ envvars.py
 *.swp
 
 # data files
-*.csv
-
-# scripts
-*.hs
+data/

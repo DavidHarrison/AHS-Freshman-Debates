@@ -75,6 +75,11 @@ class Student(Model):
 
     def __unicode__(self):
         return '%s' % self.last_name + ', ' + self.first_name
+    
+    class Meta:
+        #TODO, can it be assured that no two student will have the same
+        #first/last name combination (unlikely but possible)?
+        unique_together = ('first_name', 'last_name')
 
 class Team(Model):
     #TODO, are these redundant to the roles? If not, could they be done as

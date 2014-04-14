@@ -3,50 +3,49 @@
 #transform school-given student records to simple csv records for easy
 #parsing into Django database
 
-from csv      import DictReader, DictWriter
-from tempfile import TemporaryFile
+from tablib import Dataset
 
-ENGLISH_COURSE_ID = u"10CP01"
-IHS_COURSE_ID     = u"900012"
-IN_FIELDS         = [u'name', u'period', u'teacher', u'course_id']
-OUT_FIELDS        = [u'id', u'first_name', u'last_name', u'english_period',
-                     u'english_teacher', u'ihs_period', u'ihs_teacher']
+ENGLISH_COURSE_ID = "10CP01"
+IHS_COURSE_ID     = "900012"
+IN_FIELDS         = ['name', 'period', 'teacher', 'course_id']
+OUT_FIELDS        = ['first_name', 'last_name', 'english_period',
+                     'english_teacher', 'ihs_period', 'ihs_teacher']
 
-def mergeDebaters(f_old):
-    debaters_old = list(DictReader(f_old, fieldnames=IN_FIELDS))
+#Dataset -> Dataset
+def mergeDebaters(dataset):
+    dataset.headers = IN_FIELDS
+    debaters_old = dataset.dict
     english_debaters, ihs_debaters = [], []
     for d in debaters_old:
-        if d[u'course_id'] == ENGLISH_COURSE_ID:
+        if d['course_id'] == ENGLISH_COURSE_ID:
             english_debaters.append(d)
-        elif d[u'course_id'] == IHS_COURSE_ID:
+        elif d['course_id'] == IHS_COURSE_ID:
             ihs_debaters.append(d)
-    debaters_new = []
-    i = 0
+    dataset_new = Dataset()
+    dataset_new.headers = OUT_FIELDS
     debaters_zipped = zipDebaters(english_debaters, ihs_debaters)
     debaters_zipped.reverse()
     for d in debaters_zipped:
         debater = splitName(d)
-        debater['id'] = str(i)
-        debaters_new.append(debater)
-        i += 1
-    return debaters_new
-    #f_new = TemporaryFile()
-    #for d in debaters_new:
-    #    DictWriter(f_new, OUT_FIELDS).writerow(d)
-    #return f_new
-
+        #convert dictionary to a tuple and append it to the dataset
+        l = []
+        for key in OUT_FIELDS:
+            l.append(debater[key])
+        dataset_new.append(tuple(l))
+    return dataset_new
+    
 def zipDebaters(english, ihs):
     if len(english) > 0:
         e = english[0]
         possible_is = []
         for d in ihs:
-            if d[u'name'] == e[u'name']:
+            if d['name'] == e['name']:
                 possible_is.append(d)
         if len(ihs) > 0 and len(possible_is) > 0:
             i = possible_is[0]
             new_ihs = []
             for d in ihs:
-                if d[u'name'] != e[u'name']:
+                if d['name'] != e['name']:
                     new_ihs.append(d)
             new_debater = mergeDebater(e, i)
         else:
@@ -65,41 +64,31 @@ def zipDebaters(english, ihs):
 def mergeDebater(english, ihs):
     debater = {}
     if english != None:
-        debater[u'name']            = english[u'name']
-        debater[u'english_period']  = english[u'period']
-        debater[u'english_teacher'] = english[u'teacher']
+        debater['name']            = english['name']
+        debater['english_period']  = english['period']
+        debater['english_teacher'] = english['teacher']
     else:
-        debater[u'name']            = None
-        debater[u'english_period']  = None
-        debater[u'english_teacher'] = None
+        debater['name']            = None
+        debater['english_period']  = None
+        debater['english_teacher'] = None
     if ihs != None:
-        debater[u'name']        = ihs['name']
-        debater[u'ihs_period']  = ihs['period']
-        debater[u'ihs_teacher'] = ihs['teacher']
+        debater['name']        = ihs['name']
+        debater['ihs_period']  = ihs['period']
+        debater['ihs_teacher'] = ihs['teacher']
     else:
-        debater[u'ihs_period']  = None
-        debater[u'ihs_teacher'] = None
+        debater['ihs_period']  = None
+        debater['ihs_teacher'] = None
     #if both english and ihs are null, return None
-    if debater[u'name'] == None:
+    if debater['name'] == None:
         return None
     #otherwise, return the constructed debater dict (may have None fields)
     return debater
 
 def splitName(debater):
-    name = debater[u'name']
-    last_name  = name.split(u", ")[0]
-    first_name = name.split(u", ")[1]
-    debater.pop(u'name', None)
-    debater[u'first_name'] = first_name
-    debater[u'last_name']  = last_name
+    name = debater['name']
+    last_name  = name.split(", ")[0]
+    first_name = name.split(", ")[1]
+    debater.pop('name', None)
+    debater['first_name'] = first_name
+    debater['last_name']  = last_name
     return debater
-
-'''
-with open("freshmen.csv", 'r') as f:
-    debaters = mergeDebaters(f)
-with open("debaters.csv", 'w') as f:
-    dw = DictWriter(f, OUT_FIELDS)
-    dw.writeheader()
-    for d in debaters:
-        dw.writerow(d)
-'''

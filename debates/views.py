@@ -1,23 +1,22 @@
 #!/usr/bin/env python2.7
 #file: views.py
 
-from   django.shortcuts       import render
-from   debates.models         import (
-                                         Topic, Location, Date, Score,
-                                         GoogleUser, Student, Team
-                                     )
-from   debates.forms          import (
-                                         ScoreForm, TeamForm,
-                                         RegistrationForm, UploadDebatersForm
-                                     )
-from   debates.assign_scores  import averageScores
-from   debates.load           import parseDebaters
-from   django.shortcuts       import render_to_response
-from   django.template        import RequestContext
-from   django.contrib.admin.views.decorators import staff_member_required
-import logging
+from django.shortcuts       import render
+from debates.models         import (
+                                       Topic, Location, Date, Score,
+                                       GoogleUser, Student, Team
+                                   )
+from debates.forms          import (
+                                       ScoreForm, TeamForm,
+                                       RegistrationForm, UploadDebatersForm
+                                   )
+from debates.assign_scores  import averageScores
+from debates.load           import parseDebaters
+from django.shortcuts       import render_to_response
+from django.template        import RequestContext
+from logging                import getLogger
 
-logger = logging.getLogger(u'logview.debugger')
+logger = getLogger(u'logview.debugger')
 
 # get the debate that are on
 def judge(request):
@@ -117,18 +116,3 @@ def team_create(request):
 
 def debate_selector(request):
     return render(request, u'debates/debate_selector.html')
-
-@staff_member_required
-def import_debaters(request):
-    if request.method == u"POST":
-        form = UploadDebatersForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            success = True
-            context = {u"form": form, u"success": success}
-            return HttpResponseRedirect(u"../")
-    else:
-        form = UploadDebatersForm()
-        context = {u'form': form, u'opts': None, u'app_label': None}
-        return render_to_response(u"admin/change_form.html", context,
-                                  RequestContext(request))
