@@ -58,3 +58,6 @@ envvars.py
 
 # data files
 data/
+
+# pip source folders for locally installed libraries
+src/

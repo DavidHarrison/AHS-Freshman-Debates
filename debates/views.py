@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.4
 #file: views.py
 
 from django.shortcuts       import render
@@ -12,21 +12,21 @@ from django.shortcuts       import render_to_response
 from django.template        import RequestContext
 from logging                import getLogger
 
-logger = getLogger(u'logview.debugger')
+logger = getLogger('logview.debugger')
 
 # get the debate that are on
 def judge(request):
     aff_form = ScoreForm()
     neg_form = ScoreForm()
     #TODO, what should happen with this
-    if request.method == u'GET':
+    if request.method == 'GET':
         pass
-    elif request.method == u'POST':
+    elif request.method == 'POST':
         form = ScoreForm(request.POST)
         if form.is_valid():
             s = form.save()
             #if the form is affirmative, set the object to be affirmative
-            if u'form_affirmative' in request.POST:
+            if 'form_affirmative' in request.POST:
                 s.is_aff = True
                 aff_form = form
             #else, assume its negative (not affirmative)
@@ -36,23 +36,23 @@ def judge(request):
             #save the form to the database
             s.save()
     forms = {
-                u'affirmative_form': aff_form,
-                u'negative_form':    neg_form
+                'affirmative_form': aff_form,
+                'negative_form':    neg_form
             }
-    return render(request, u'debates/judge.html', forms)
+    return render(request, 'debates/judge.html', forms)
 
 #TODO, what needs to happen with this?
 def scoring_upload(request):
     aff_scores = Score.objects.filter(is_aff = True)
     neg_scores = Score.objects.filter(is_aff = False)
-    return render(request, u'debates/scoring_upload.html',
+    return render(request, 'debates/scoring_upload.html',
                   {
-                      u'affirmative_scores': aff_scores,
-                      u'negative_scores':    neg_scores,
+                      'affirmative_scores': aff_scores,
+                      'negative_scores':    neg_scores,
                   })
 
 def splash(request):
-    return render_to_response(u'debates/splash.html', RequestContext(request))
+    return render_to_response('debates/splash.html', RequestContext(request))
 
 #TODO, add team selector and filter teams by teacher
 def view_scores(request):
@@ -61,18 +61,18 @@ def view_scores(request):
     team = Team.objects.filter(team_number = tn)
     judge_scores = Score.objects.filter(team_number = tn)
     avg_score = averageScores(judge_scores)
-    return render(request, u'debates/view_scores.html', {u'team':  team,
-                                                         u'score': avg_score})
+    return render(request, 'debates/view_scores.html', {'team':  team,
+                                                         'score': avg_score})
 
 def teacher_selector(request):
-    return render(request, u'debates/teacher_selector.html')
+    return render(request, 'debates/teacher_selector.html')
 
 def team_create(request):
     form = TeamForm()
     #TODO, what should happen with this
-    if request.method == u'GET':
+    if request.method == 'GET':
         pass
-    elif request.method == u'POST':
+    elif request.method == 'POST':
         form = TeamForm(request.POST)
         #TODO, what should happen if this fails?
         if form.is_valid():
@@ -82,12 +82,12 @@ def team_create(request):
     debaters = list(Debater.objects.all())
     topics   = list(Topic.objects.all())
     context = {
-                  u'form': form,
-                  u'topics': topics,
-                  u'debaters': debaters
+                  'form': form,
+                  'topics': topics,
+                  'debaters': debaters
               }
-    return render(request, u'debates/team_create.html', context)
+    return render(request, 'debates/team_create.html', context)
 
 #TODO, fill out
 def debate_selector(request):
-    return render(request, u'debates/debate_selector.html')
+    return render(request, 'debates/debate_selector.html')

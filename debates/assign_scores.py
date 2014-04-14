@@ -1,7 +1,7 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.4
 #file: assign_scores.py
 
-from __future__ import division
+
 import sys
 import os
 
@@ -10,7 +10,7 @@ import os
 #os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 
 #import logging
-from   debates.models import Score, Team
+from debates.models import Score, Team
 from io import open
 
 #logger = logging.getLogger('logview.debugger')
@@ -25,9 +25,9 @@ def scoresToFile():
         writeScoreToFile(t.team_number, avg_score)
 
 def writeScoreToFile(team_number, score):
-    f = open(u"scores.txt", u"a")
+    f = open("scores.txt", "a")
     #TODO, do as a template?
-    score_format = u"""
+    score_format = """
                    Team {0} got an overall argument score of {1}.\n
                    \tThe first speaker's score was:   {2}.
                    \tThe second speaker's score was:  {3}.
@@ -36,14 +36,14 @@ def writeScoreToFile(team_number, score):
                    \tThe cross examination score was: {6}.
                    \tThe argument score was:          {7}.
                    """
-    score_string = score_format.format(unicode(team_number),
-                                       unicode(score.argument),
-                                       unicode(score.speaker1),
-                                       unicode(score.speaker2),
-                                       unicode(score.slideshow),
-                                       unicode(score.rebuttal),
-                                       unicode(score.cross_examination),
-                                       unicode(score.argument))
+    score_string = score_format.format(str(team_number),
+                                       str(score.argument),
+                                       str(score.speaker1),
+                                       str(score.speaker2),
+                                       str(score.slideshow),
+                                       str(score.rebuttal),
+                                       str(score.cross_examination),
+                                       str(score.argument))
     f.write(score_string)
     f.close()
 

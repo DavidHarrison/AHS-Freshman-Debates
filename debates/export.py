@@ -1,18 +1,18 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.4
 
-from __future__ import with_statement
+
 import logging
 import sys
 import os
 from   debates.models import Debate, Period
 from   string         import Template
 from io import open
-from itertools import imap
 
-logger = logging.getLogger(u'logview.debugger')
 
-ROLL_FILE = u"roll_sheet"
-TEMPLATE = Template(u"""
+logger = logging.getLogger('logview.debugger')
+
+ROLL_FILE = "roll_sheet"
+TEMPLATE = Template("""
                     Period: $period\n
                     Location: $location\n
                     Teams debating: $aff_teams, $neg_teams\n
@@ -21,20 +21,20 @@ TEMPLATE = Template(u"""
 
 def writeRoll():
     #clear any existing data from the ROLL_FILE
-    open(ROLL_FILE, u'w').close()
-    periods = list(imap(lambda p: p.period, Period.object.all()))
-    logger.debug(u"Num periods: " + unicode(len(periods)))
+    open(ROLL_FILE, 'w').close()
+    periods = list(map(lambda p: p.period, Period.object.all()))
+    logger.debug("Num periods: " + str(len(periods)))
     for p in periods:
-        logger.debug(u"Period is " + p)
+        logger.debug("Period is " + p)
         debates = list(Debate.objects.filter(period = p))
-        logger.debug(u"Num debates in period: " + unicode(len(debates)))
+        logger.debug("Num debates in period: " + str(len(debates)))
         for d in debates:
             #make the list a string and drop the brackets ([])
-            sts = unicode(d.spectators)[1:-1]
+            sts = str(d.spectators)[1:-1]
             string = template.substitute(period=p,
                                          location=d.location,
                                          aff_team=d.affirmative,
                                          neg_team=d.negative,
                                          spec_teams=sts)
-            with open(ROLL_FILE, u'a') as f:
+            with open(ROLL_FILE, 'a') as f:
                 f.write(string)

@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.4
 #file: forms.py
 
 from django.forms           import ModelForm, ChoiceField, RadioSelect, Form
@@ -6,7 +6,7 @@ from django.db.models       import FileField
 from debates.models         import GoogleUser, Score, Team
 from debates.merge_debaters import mergeDebaters
 
-u'''
+'''
 SCORE_CHOICES = (
         ('5','5'),
         ('6','6'),

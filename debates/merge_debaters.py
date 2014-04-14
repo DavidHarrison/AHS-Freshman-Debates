@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.4
 #file: merge_debaters.py
 #transform school-given student records to simple csv records for easy
 #parsing into Django database
