@@ -136,6 +136,7 @@ TEMPLATE_DIRS = (
 )
 
 INSTALLED_APPS = (
+    #TODO, are these necessary?
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -149,8 +150,10 @@ INSTALLED_APPS = (
     # End of Admin
     'debates',
     #'debates.models.User',
-    #'django_openid_auth',
+    #for social authentication with python-social-auth
+    #(using default Django ORM)
     'social.apps.django_app.default',
+    #for model imports using django-import-export
     'import_export',
 )
 
@@ -166,16 +169,17 @@ INSTALLED_APPS = (
 # Check for new groups, or only on initial user creation
 GAPPS_ALWAY_ADD_GROUPS = False
 AUTHENTICATION_BACKENDS = (
-    #'social.backends.google.GoogleOAuth',
-    #'social.backends.CustomGoogleBackend.CustomGoogle',
-    'social.backends.google.GoogleOAuth2',
-    # 'social.backends.google.Google'
+    #Google is deprecating OpenID and OAuth in favor of Google + authentication
+    'social.backends.google.GooglePlusAuth',
+    #needed becaus django.contrib.auth is in use
     'django.contrib.auth.backends.ModelBackend',
 )
 
+LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/splash'
 LOGIN_ERROR_URL = '/login-error/'
-LOGIN_URL = '/login/'
+LOGOUT_URL = '/logout/'
+
 SOCIAL_AUTH_NEW_USER_REDIRECT_URL = '/new_user_login'
 SOCIAL_AUTH_COMPLETE_URL_NAME  = 'socialauth_complete'
 SOCIAL_AUTH_ASSOCIATE_URL_NAME = 'socialauth_associate_complete'
@@ -183,36 +187,39 @@ SOCIAL_AUTH_UID_LENGTH = 222
 SOCIAL_AUTH_NONCE_SERVER_URL_LENGTH = 200
 SOCIAL_AUTH_ASSOCIATION_SERVER_URL_LENGTH = 135
 SOCIAL_AUTH_ASSOCIATION_HANDLE_LENGTH = 125
-LOGOUT_URL = '/logout/'
-OPENID_SSO_SERVER_URL = 'https://www.google.com/accounts/o8/id'
-
-
-
-# TEMPLATE_CONTEXT_PROCESSORS = (
-#     'django.contrib.auth.context_processors.auth',
-#     'social.context_processors.social_auth_by_type_backends',
-#     'social.context_processors.social_auth_backends',
-#     'django.core.context_processors.static',
-# )
-
 SOCIAL_AUTH_DEFAULT_USERNAME = 'New_User'
-SOCIAL_AUTH_UID_LENGTH = 222
-SOCIAL_AUTH_NONCE_SERVER_URL_LENGTH = 200
-SOCIAL_AUTH_ASSOCIATION_SERVER_URL_LENGTH = 135
-SOCIAL_AUTH_ASSOCIATION_HANDLE_LENGTH = 125
 SOCIAL_AUTH_ENABLED_BACKENDS = ('google')
 SOCIAL_AUTH_USERNAME_IS_FULL_EMAIL = True
-#AUTH_USER_MODEL = 'debates.models.User'
+#SOCIAL_AUTH_USER_MODEL = 'debates.models.GoogleUser'
 
-SOCIAL_AUTH_PIPELINE = (
-    'social.backends.pipeline.social.social_auth_user',
-    'social.backends.pipeline.associate.associate_by_email',
-    'social.backends.pipeline.user.get_username',
-    'social.backends.pipeline.user.create_user',
-    'social.backends.pipeline.social.associate_user',
-    'social.backends.pipeline.social.load_extra_data',
-    'social.backends.pipeline.user.update_user_details'
+#TODO, should these be uncommented? (Probably needed for getting social auth
+#to display in templates
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'django.contrib.auth.context_processors.auth',
+    'social.apps.django_app.context_processors.backends',
+    #'social.apps.django_app.context_processors.login_redirect',
+    'django.core.context_processors.static',
+    'django.core.context_processors.debug',
+    'django.core.context_processors.i18n',
+    'django.core.context_processors.media',
+    'django.contrib.messages.context_processors.messages',
 )
+
+
+#TODO, need the following:
+#SOCIAL_AUTH_GOOGLE_PLUS_KEY =
+#SOCIAL_AUTH_GOOGLE_PLUS_SECRET =
+
+#TODO, will the default work?
+#SOCIAL_AUTH_PIPELINE = (
+#    'social.backends.pipeline.social.social_auth_user',
+#    'social.backends.pipeline.associate.associate_by_email',
+#    'social.backends.pipeline.user.get_username',
+#    'social.backends.pipeline.user.create_user',
+#    'social.backends.pipeline.social.associate_user',
+#    'social.backends.pipeline.social.load_extra_data',
+#    'social.backends.pipeline.user.update_user_details'
+#)
 
 #project id = thinking-volt-426
 

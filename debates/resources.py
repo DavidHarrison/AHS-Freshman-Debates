@@ -25,7 +25,6 @@ class DebaterResource(ModelResource):
         export_order = ('first_name','last_name',
                         'english_period','english_teacher',
                         'ihs_period','ihs_teacher')
-        #exclude = ('name', 'period', 'teacher', 'course', 'id')
         import_id_fields = ['first_name', 'last_name']
 
 class TeacherResource(ModelResource):

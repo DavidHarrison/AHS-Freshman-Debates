@@ -6,7 +6,7 @@ jQuery(function() {
     var form = jQuery("#form")
     console.log (form_affirmative)
     form_affirmative.submit(function(e){
-        jQuery("#sendbutton").attr('disabled', true)
+        //jQuery("#sendbutton").attr('disabled', true)
         jQuery("#sendwrapper").prepend('<span>Sending message, please wait... </span>')
         jQuery("#ajaxwrapper").load(
             form_affirmative.attr('action') + ' #ajaxwrapper',
@@ -33,45 +33,24 @@ jQuery(function() {
                     <br>
                     <br>
                     <ul>
-                        <li>Debate Topic: <input id="color" list="suggests">
-                            <datalist id="suggests">
-                                {% for topic in topics %}
-                                <option value="{{ topic.name }}">
-                                {% endfor %}
-                            </datalist>
+                        <li>Debate Topic: <input id="color" list="topics" />
                         <li>Team Number:         {{ form.team_number }}
                         <li>Team Name:           {{ form.team_name }}
-                        <li>Slideshow Presenter: <input id="color" list="suggests">
-                            <datalist id="suggests">
-                                {% for debater in debaters %}
-                                <option value="{{ debater.first_name }} {{ debater.last_name }}">
-                                {% endfor %}
-                            </datalist>
-                        <li>First Speaker: <input id="color" list="suggests">
-                            <datalist id="suggests">
-                                {% for debater in debaters %}
-                                <option value="{{ debater.first_name }} {{ debater.last_name }}">
-                                {% endfor %}
-                            </datalist>
-                        <li>Second Speaker: <input id="color" list="suggests">
-                            <datalist id="suggests">
-                                {% for debater in debaters %}
-                                <option value="{{ debater.first_name }} {{ debater.last_name }}">
-                                {% endfor %}
-                            </datalist>
-                        <li>Cross Examiner: <input id="color" list="suggests">
-                            <datalist id="suggests">
-                                {% for debater in debaters %}
-                                <option value="{{ debater.first_name }} {{ debater.last_name }}">
-                                {% endfor %}
-                            </datalist>
-                        <li>Rebutter: <input id="color" list="suggests">
-                            <datalist id="suggests">
-                                {% for debater in debaters %}
-                                <option value="{{ debater.first_name }} {{ debater.last_name }}">
-                                {% endfor %}
-                            </datalist>
-                    </ul>
+                        <li>Slideshow Presenter: <input id="color" list="debaters" />
+                        <li>First Speaker: <input id="color" list="debaters" />
+                        <li>Second Speaker: <input id="color" list="debaters" />
+                        <li>Cross Examiner: <input id="color" list="debaters" />
+                        <li>Rebutter: <input id="color" list="debaters" />
+                        <datalist id="topics">
+                            {% for topic in topics %}
+                            <option value="{{ topic.name }}">
+                            {% endfor %}
+                        </datalist>
+                        <datalist id="debaters">
+                            {% for debater in debaters %}
+                            <option value="{{ debater.first_name }} {{ debater.last_name }}">
+                            {% endfor %}
+                        </datalist>
                     <p id="sendwrapper"><input type='submit' value='Submit Team'/></p>
                 </div>
             </form>

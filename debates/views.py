@@ -1,16 +1,15 @@
 #!/usr/bin/env python3.4
 #file: views.py
 
-from django.shortcuts       import render
-from debates.models         import (
-                                       Topic, Location, Date, Score,
-                                       GoogleUser, Debater, Team
-                                   )
-from debates.forms          import ScoreForm, TeamForm, RegistrationForm
-from debates.assign_scores  import averageScores
-from django.shortcuts       import render_to_response
-from django.template        import RequestContext
-from logging                import getLogger
+from debates.models import Topic, Location, Date, Score, GoogleUser, Debater, Team
+from debates.forms import ScoreForm, TeamForm, RegistrationForm
+from debates.assign_scores import averageScores
+from django.shortcuts import render_to_response, redirect, render
+from django.template import RequestContext
+#from django.contrib.auth.decorators import login_required
+#from social.backends.google import GooglePlusAuth
+from django.conf import settings
+from logging import getLogger
 
 logger = getLogger('logview.debugger')
 
@@ -52,7 +51,12 @@ def scoring_upload(request):
                   })
 
 def splash(request):
-    return render_to_response('debates/splash.html', RequestContext(request))
+    return render_to_response('debates/splash.html', {
+        'plus_id': getattr(settings, 'SOCIAL_AUTH_GOOGLE_PLUS_KEY', None)
+    }, RequestContext(request))
+
+#def splash(request):
+#    return render_to_response('debates/splash.html', {}, RequestContext(request))
 
 #TODO, add team selector and filter teams by teacher
 def view_scores(request):

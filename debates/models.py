@@ -49,12 +49,24 @@ class Topic(Model):
     def __str__(self):
         return '%s' % self.topic
 
+#For Social Auth (using Google OAuth2)
+#TODO, should this be generalized to User (non Google specific)
 class GoogleUser(Model):
+    #TODO, needs a username field
+    #username = ?
+    #TODO, is_authenticated field suggested
+    #is_authenticated = BooleanField()
+    #TODO, is_active field suggested
+    #is_active = BooleanField()
     first_name  = CharField(max_length=50)
     last_name   = CharField(max_length=50)
     role        = CharField(max_length=2, choices=ROLE_CHOICES)
+    #required
     email       = CharField(max_length=30)
+    #TODO, should the password be stored (is this dealt with automatically
+    #with social authentication)?
     password    = CharField(max_length=150)
+    #TODO, why is this necessary?
     date_joined = DateTimeField("date joined", default=timezone.now)
 
     def __str__(self):
