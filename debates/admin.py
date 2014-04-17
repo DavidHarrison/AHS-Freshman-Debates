@@ -3,9 +3,9 @@
 
 from django.contrib.admin import autodiscover, site
 from debates.models       import (
-                                     Topic, Location, Date, Score, School,
-                                     GoogleUser, Debater, Team, Debate,
-                                     Period,
+                                     Teacher, Judge, Debater,
+                                     Topic, Location, Score, Subscore,
+                                     Deduction, Debate, Team
                                  )
 from debates.resources    import DebaterResource, TeacherResource
 from import_export.admin  import ImportExportModelAdmin
@@ -21,13 +21,13 @@ class DebaterAdmin(ImportExportModelAdmin):
 class TeacherAdmin(ImportExportModelAdmin):
     resource_class = TeacherResource
 
+site.register(Teacher, TeacherAdmin)
+site.register(Judge)
+site.register(Debater, DebaterAdmin)
 site.register(Topic)
 site.register(Location)
-site.register(Date)
 site.register(Score)
-site.register(School)
-site.register(GoogleUser)
-site.register(Debater, DebaterAdmin)
-site.register(Team)#, TeamAdmin)
+site.register(Subscore)
+site.register(Deduction)
 site.register(Debate)
-site.register(Period)
+site.register(Team)#, TeamAdmin)

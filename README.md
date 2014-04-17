@@ -2,11 +2,14 @@
 Judging App for Albany High School Freshman Renewal Debates.
 
 # TODO
-- Clean up admin debater import (hide CSV fields).
-- Get Google authentication to work (Google + Sign In as OpenID and OpenAuth are being deprecated)
-    - Integrate it to give permissions.
+- Redo admin import for new models
+- Get Google authentication to work (Google+ Sign In as OpenID and OpenAuth are being deprecated)
+    - signup for Google+ Sign In
+    - Use for user permissions
 - Write tests
 - Decide what should be done in admin versus in app.
+- Use PEP8
+- Decide how to deal with attendance
 
 # Requirements
 - [Python](https://www.python.org/downloads/) 3.x
@@ -20,4 +23,7 @@ Judging App for Albany High School Freshman Renewal Debates.
       git+https://github.com/kennethreitz/tablib.git#egg=tablib`
 
 # Setup
+- move debates\_site/settings\_secret.py.template to debates\_site/settings\_secret.py
+- follow step 1 from the [Google+ Sign in quickstart for Python](https://developers.google.com/+/quickstart/python)
+- fill out the client key and secret in the debates\_site/settings\_secret.py file
 - ./manage.py syncdb (initialize database tables)

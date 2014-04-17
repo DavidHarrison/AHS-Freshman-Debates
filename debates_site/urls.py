@@ -6,17 +6,19 @@ from django.contrib   import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    url(r'^$',                    'debates.views.splash'),
-    url(r'^judge$',               'debates.views.judge'),
-    url(r'^view_scores$',         'debates.views.view_scores'),
-    url(r'^teacher_selector$',    'debates.views.teacher_selector'),
-    url(r'^team_create$',         'debates.views.team_create'),
-    url(r'^debate_selector$',     'debates.views.debate_selector'),
-    url(r'^post/scoring_upload$', 'debates.views.scoring_upload'), 
-    #add social name space for social authorization
-    url(r'', include('social.apps.django_app.urls', namespace='social')),
+    url(r'^$', 'debates.views.login'),
+    #url(r'^login/$', 'debates.views.login'),
     #admin
-    url(r'^admin/', include(admin.site.urls)),
+    url(r'^admin', include(admin.site.urls)),
     #admin documentation
     #url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
+    url(r'^teacher$', 'debates.views.teacher'),
+    url(r'^view_team$', 'debates.views.view_team'),
+    url(r'^judge$', 'debates.views.judge'),
+    url(r'^score_debate$', 'debates.views.score_debate'),
+    url(r'^debater$', 'debates.views.debater'),
+    url(r'^view_score$', 'debates.views.view_score'),
+    #url(r'^login-error/$', 'debates.views.login_error'),
+    #add social name space for social authorization
+    url(r'', include('social.apps.django_app.urls', namespace='social')),
 )
