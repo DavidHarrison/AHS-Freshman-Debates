@@ -3,9 +3,6 @@ Judging App for Albany High School Freshman Renewal Debates.
 
 # TODO
 - Redo admin import for new models
-- Get Google authentication to work (Google+ Sign In as OpenID and OpenAuth are being deprecated)
-    - signup for Google+ Sign In
-    - Use for user permissions
 - Write tests
 - Decide what should be done in admin versus in app.
 - Use PEP8
